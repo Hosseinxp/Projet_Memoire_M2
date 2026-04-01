@@ -1,0 +1,12 @@
+# Environnement Python
+venv/
+__pycache__/
+*.pyc
+
+# Fichiers macOS
+.DS_Store
+
+# Dossiers médias (à ne pas envoyer sur Git)
+inputs/
+outputs/
+temp/
