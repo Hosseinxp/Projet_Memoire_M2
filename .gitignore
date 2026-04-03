@@ -10,3 +10,4 @@ __pycache__/
 inputs/
 outputs/
 temp/
+.env/
