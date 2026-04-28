@@ -23,6 +23,9 @@ def generate_depth_map_local(input_image_path, output_image_path):
     print(f"Succès ! La carte de profondeur a été sauvegardée ici : {output_image_path}\n")
 
 if __name__ == "__main__":
-    image_source = "inputs/chair.jpg"
-    image_resultat = "temp/chair_depth.png" 
+    image_source = "inputs/Desk/Desk.png"
+    image_resultat = "temp/Desk/Desk_depth.png" 
     generate_depth_map_local(image_source, image_resultat)
+
+
+    
