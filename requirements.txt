@@ -1,7 +1,12 @@
-certifi==2026.2.25
-charset-normalizer==3.4.6
-idna==3.11
-pillow==12.2.0
-python-dotenv==1.2.2
-requests==2.33.1
-urllib3==2.6.3
+# --- Intelligence Artificielle & Traitement d'image ---
+diffusers==0.37.1
+numpy==2.4.6
+opencv_python==4.13.0.92
+Pillow==12.2.0
+torch==2.11.0
+transformers==5.5.0
+ultralytics==8.4.46
+
+# --- API Blender ---
+# Note: Ne décommentez 'bpy' que si vous n'utilisez pas l'exécutable Blender natif.
+# bpy==5.1.2
