@@ -35,5 +35,5 @@ L'environnement nécessite Python 3.11, Blender (exécutable natif accessible en
 
 1. Cloner le dépôt :
 ```bash
-git clone [https://github.com/votre-username/Cubot_Pipeline.git](https://github.com/votre-username/Cubot_Pipeline.git)
+git clone [https://github.com/hosseinxp/Cubot_Pipeline.git](https://github.com/hosseinxp/Cubot_Pipeline.git)
 cd Cubot_Pipeline
