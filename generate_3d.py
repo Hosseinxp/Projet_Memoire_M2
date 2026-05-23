@@ -1,12 +1,23 @@
 import bpy
 import os
+import sys # <-- Nouveau
 
-# --- CONFIGURATION DES CHEMINS ---
-CHEMIN_DEPTH = os.path.abspath("temp/Desk/Desk_depth.png")
-CHEMIN_COULEUR = os.path.abspath("temp/Desk/Desk_final.png") 
-CHEMIN_SAUVEGARDE = os.path.abspath("Blender_output/Desk/Desk_test_texture.blend")
-# On remplace l'OBJ par le FBX pour Unity
-CHEMIN_EXPORT_FBX = os.path.abspath("Blender_output/Desk/Desk_model.fbx") 
+# Récupération des arguments passés après "--" par le script principal
+try:
+    index = sys.argv.index("--") + 1
+    args = sys.argv[index:]
+except ValueError:
+    args = []
+
+if len(args) < 4:
+    print("ERREUR : Il manque des chemins pour le script Blender.")
+    sys.exit(1)
+
+# --- CONFIGURATION DES CHEMINS DYNAMIQUES ---
+CHEMIN_DEPTH = os.path.abspath(args[0])
+CHEMIN_COULEUR = os.path.abspath(args[1])
+CHEMIN_SAUVEGARDE = os.path.abspath(args[2])
+CHEMIN_EXPORT_FBX = os.path.abspath(args[3])
 
 # 1. Nettoyer la scène
 bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -15,6 +26,10 @@ bpy.ops.wm.read_factory_settings(use_empty=True)
 bpy.ops.mesh.primitive_plane_add(size=2.0, location=(0, 0, 0))
 plane = bpy.context.active_object
 plane.name = "Relief_2_5D"
+
+# --- NOUVEAU : Étirer le plan au format paysage (Ratio 2:1) ---
+plane.scale[0] = 2.0 
+bpy.ops.object.transform_apply(scale=True)
 
 # 3. Subdiviser le plan
 bpy.ops.object.mode_set(mode='EDIT')
@@ -33,6 +48,11 @@ if os.path.exists(CHEMIN_DEPTH):
     mod_displace.strength = 0.3
     mod_displace.mid_level = 0.0
     print("SUCCÈS : Le modificateur de Displacement a sculpté le maillage !")
+    
+    # --- AJOUT CRUCIAL : Geler la géométrie ---
+    bpy.context.view_layer.objects.active = plane
+    bpy.ops.object.modifier_apply(modifier=mod_displace.name)
+    print("SUCCÈS : La géométrie 3D a été figée (Modificateur appliqué) !")
 
 # 5. L'HABILLAGE (Version Blindée)
 print("\n--- Création du Matériau ---")
@@ -91,7 +111,7 @@ try:
         bpy.ops.export_scene.fbx(
             filepath=CHEMIN_EXPORT_FBX,
             use_selection=True,
-            object_types={'ARMATURE', 'MESH', 'OTHER'},
+            object_types={'MESH'}, # <- CORRECTION ICI
             path_mode='COPY',
             embed_textures=True,
             batch_mode='OFF',

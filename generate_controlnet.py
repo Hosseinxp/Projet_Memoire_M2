@@ -1,15 +1,17 @@
 import os
 import torch
+import sys # <-- Ajouter en haut avec les imports
 from diffusers import StableDiffusionControlNetImg2ImgPipeline, ControlNetModel, UniPCMultistepScheduler
 from PIL import Image
 
 def generate_true_lowpoly(original_image_path, depth_map_path, output_image_path, detected_subject):
     print(f"\n--- Démarrage de la Stylisation Low-Poly Avancée ---")
     
-    # 1. PRÉPARATION DES IMAGES (On force le 512x512)
+    # 1. PRÉPARATION DES IMAGES (Format Paysage 2:1)
     print("1. Lecture et redimensionnement...")
-    init_image = Image.open(original_image_path).convert("RGB").resize((512, 512))
-    depth_image = Image.open(depth_map_path).convert("RGB").resize((512, 512))
+    # MODIFICATION ICI : On passe de (512, 512) à (1024, 512)
+    init_image = Image.open(original_image_path).convert("RGB").resize((1024, 512))
+    depth_image = Image.open(depth_map_path).convert("RGB").resize((1024, 512))
 
     # 2. CHARGEMENT DES MOTEURS (Pipeline Img2Img pour les couleurs)
     print("2. Chargement des moteurs IA sur puce Apple Silicon...")
@@ -47,7 +49,7 @@ def generate_true_lowpoly(original_image_path, depth_map_path, output_image_path
         image=init_image,          # La photo originale (Couleurs)
         control_image=depth_image, # Le moule 3D (Structure)
         num_inference_steps=20,
-        strength=0.75,                     # Permet de générer des polygones tout en gardant les couleurs
+        strength=0.3,                     # Permet de générer des polygones tout en gardant les couleurs
         controlnet_conditioning_scale=0.80 # 0.80 : Laisse l'IA casser les arrondis du moule
     ).images[0]
 
@@ -55,12 +57,15 @@ def generate_true_lowpoly(original_image_path, depth_map_path, output_image_path
     image.save(output_image_path)
     print(f"\nSuccès ! L'asset géométrique est sauvegardé ici : {output_image_path}\n")
 
+
+
 if __name__ == "__main__":
-    image_originale = "inputs/Desk/Desk.png"
-    image_depth = "temp/Desk/Desk_depth.png"
-    image_resultat = "temp/Desk/Desk_final.png"
-    
-    # Le sujet détecté par BLIP
-    sujet = "gray armchair with light wood legs" 
-    
-    generate_true_lowpoly(image_originale, image_depth, image_resultat, sujet)
+    if len(sys.argv) > 4:
+        image_originale = sys.argv[1]
+        image_depth = sys.argv[2]
+        image_resultat = sys.argv[3]
+        sujet = sys.argv[4]
+        
+        generate_true_lowpoly(image_originale, image_depth, image_resultat, sujet)
+    else:
+        print("Erreur: Arguments manquants.")

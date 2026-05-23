@@ -1,4 +1,5 @@
 import os
+import sys 
 from transformers import pipeline
 from PIL import Image
 
@@ -23,9 +24,12 @@ def generate_depth_map_local(input_image_path, output_image_path):
     print(f"Succès ! La carte de profondeur a été sauvegardée ici : {output_image_path}\n")
 
 if __name__ == "__main__":
-    image_source = "inputs/Desk/Desk.png"
-    image_resultat = "temp/Desk/Desk_depth.png" 
-    generate_depth_map_local(image_source, image_resultat)
+    if len(sys.argv) > 2:
+        image_source = sys.argv[1]
+        image_resultat = sys.argv[2]
+        generate_depth_map_local(image_source, image_resultat)
+    else:
+        print("Erreur: Arguments manquants.")
 
 
     
