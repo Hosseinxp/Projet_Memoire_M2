@@ -1,13 +1,30 @@
-# Environnement Python
+# --- Environnement virtuel ---
 venv/
-__pycache__/
-*.pyc
+.venv/
+env/
 
-# Fichiers macOS
+# --- Cache Python ---
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- Fichiers système macOS ---
 .DS_Store
 
-# Dossiers médias (à ne pas envoyer sur Git)
-inputs/
-outputs/
-temp/
-.env/
+# --- Modèles d'IA lourds ---
+models/*
+# On ignore tout le contenu de models sauf le fichier .gitkeep
+!models/.gitkeep
+
+# --- Fichiers de données locaux (images et exports 3D) ---
+input/*
+!input/.gitkeep
+output/*
+!output/.gitkeep
+exports/*
+!exports/.gitkeep
+
+# --- Fichiers temporaires Blender ---
+*.blend1
+*.blend2
